@@ -1,34 +1,26 @@
 import requests
 
 
-def get_london_weather(url_template):
-    url = url_template.format('/Лондон')
-    response = requests.get(url)
-    return response.text
-
-
-def get_sheremetyevo_weather(url_template):
-    url = url_template.format('/Шереметьево')
-    response = requests.get(url)
-    return response.text
-
-
-def get_cherepovets_weather(url_template):
-    url = url_template.format('/Череповец?mnqTM&lang=ru')
-    response = requests.get(url)
+def get_weather(url_template, city):
+    url = url_template.format(f'/{city}')
+    payload = {
+        'm': '',
+        'n': '',
+        'q': '',
+        'T': '',
+        'M': '',
+        'lang': 'ru'
+    }
+    response = requests.get(url, params=payload)
+    response.raise_for_status()
     return response.text
 
 
 def main():
     url_template = 'https://wttr.in{}'
-    london_weather = get_london_weather(url_template)
-    sheremetyevo_weather = get_sheremetyevo_weather(url_template)
-    cherepovets_weather = get_cherepovets_weather(url_template)
-    print(
-        london_weather,
-        sheremetyevo_weather,
-        cherepovets_weather
-        )
+    cities = ['Лондон', 'Шереметьево', 'Череповец']
+    for city in cities:
+        print(get_weather(url_template, city))
 
 
 if __name__ == '__main__':
